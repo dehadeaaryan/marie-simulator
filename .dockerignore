@@ -1,0 +1,13 @@
+.git
+.venv
+**/__pycache__
+**/node_modules
+web/.svelte-kit
+web/build
+web/test-results
+web/playwright-report
+.env
+.env.*
+*.egg-info
+dist
+__pycache__

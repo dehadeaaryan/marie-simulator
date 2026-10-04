@@ -1,64 +1,72 @@
+# MARIE Simulator
 
-# MarieSimulator
+A Python MARIE execution engine with a retained Qt desktop application and a SvelteKit web playground. Write assembly, assemble, step or run, and inspect registers, all 4,096 memory words, and numeric input/output.
 
-Simulator for MARIE (Machine Architecture that is Really Intuitive and Easy)
+The web app uses **Python for all assembly and execution**. Svelte/TypeScript renders the editor and state; it does not simulate the machine. No database, paid service, or AI feature is required.
 
-## Code Format
+## Run the web app locally
 
-```Python
+From this repository, in two terminals:
 
-from marieSimulator import Marie, MarieReader as mr # import the marie and marie reader modules
-
-marie = Marie(mr('trial')) # trial is the file containing Marie instructions
-marie.run() # run the program
-marie.show() # show memory in hex after running
-
+```sh
+python3 -m venv .venv
+.venv/bin/python -m pip install -r backend/requirements-dev.txt
+PYTHONPATH=src:backend .venv/bin/python -m uvicorn marie_api.app:app --host 127.0.0.1 --port 8000 --workers 1
 ```
 
-## Trial File
+```sh
+cd web
+bun install --frozen-lockfile
+bun run dev
+```
 
-```Text
+Open **http://127.0.0.1:5175**. Requires Python 3.12 and Bun 1.3.11. See [local/Docker/Coolify instructions](docs/deployment.md).
 
-        Load        X
-        Add         One
-        Store       X
+## Desktop and Python usage
+
+```sh
+.venv/bin/python -m pip install -r requirements.txt
+PYTHONPATH=src .venv/bin/python main.py
+```
+
+```python
+from marieSimulator import Marie, MarieReader
+machine = Marie(MarieReader('trial'))
+machine.run()
+machine.show()
+```
+
+The retained GUI imports also work: `from marieSimulator import MarieGUI, app`. Headless engine imports do not initialize Qt.
+
+```text
+        Load    X
+        Add     One
+        Store   X
+        Output
         Halt
-X,      HEX         0000
-One,    HEX         0001
-
+X,      HEX     0000
+One,    DEC     1
 ```
 
-## GUI Mode
+Supported instructions: JnS, Load, Store, Add, Subt, Input, Output, Halt, Skipcond, Jump, Clear, AddI, JumpI, LoadI, StoreI. Directives: HEX, DEC, ORG. Comments start with `/` or `;`. Addresses/HEX are hexadecimal; DEC is signed decimal. Values wrap to 16 bits. See [semantics and legacy fixes](docs/correctness.md).
 
-```Python
-from marieSimulator import MarieGUI, app
-import sys
+## Tests and design
 
-window = MarieGUI()
-window.show()
-sys.exit(app.exec())
+```sh
+.venv/bin/python -m pytest -q
+cd web
+bun run check
+bun run build
+bunx playwright install chromium
+bun run test:ui
 ```
 
-### Supported Opcodes (Instructions)
+Browser tests need the local servers running. Qt smoke tests skip if PySide6 is absent.
 
-1. Load X
-2. Store X
-3. Add X
-4. Subt X
-5. Input
-6. Output
-7. Halt
-8. Skipcond X
-9. Jump X
-10. Clear
-11. AddI X
-12. JumpI X
-13. LoadI X
-14. StoreI X
-15. JnS X
-16. HEX X
+- [Architecture, session lifecycle, state machine, and limits](docs/architecture.md)
+- [Correctness and compatibility notes](docs/correctness.md)
+- [Deployment and configuration](docs/deployment.md)
+- [Verification results and limitations](docs/verification.md)
+- [Existing logo provenance](docs/branding.md)
 
----
-
-Download the GUI application [here](https://www.aaryandehade.live/Marie%20Simulator.dmg)
-Or copy: [https://www.aaryandehade.live/Marie%20Simulator.dmg](https://www.aaryandehade.live/Marie%20Simulator.dmg)
+Future work: breakpoints, sharing, import/export, lessons, and history. These are outside the initial release. Original Git history and historical distributions remain; no package or hosted deployment has been published by this change.

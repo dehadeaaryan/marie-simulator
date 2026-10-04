@@ -1,6 +1,6 @@
 import sys
 from PySide6 import QtCore
-from PySide6.QtWidgets import QApplication, QMainWindow, QGridLayout, QWidget, QToolBar, QPushButton, QStatusBar, QFileDialog, QTableWidgetItem, QTableWidget, QAbstractItemView, QHeaderView
+from PySide6.QtWidgets import QApplication, QMainWindow, QGridLayout, QWidget, QToolBar, QPushButton, QStatusBar, QFileDialog, QTableWidgetItem, QTableWidget, QAbstractItemView, QHeaderView, QInputDialog, QMessageBox
 from PySide6.QtGui import QAction, QDesktopServices, QColor, QPalette
 
 from .Marie import Marie
@@ -33,6 +33,9 @@ class MarieGUI(QMainWindow):
 
         # Define GUI
         self.setup()
+        self.timer = QtCore.QTimer(self)
+        self.timer.setInterval(100)
+        self.timer.timeout.connect(self._advance)
     
     
     def setup(self):
@@ -96,12 +99,21 @@ class MarieGUI(QMainWindow):
         def loadFunc():
             fileDialog = QFileDialog()
             fileDialog.setFileMode(QFileDialog.ExistingFile)
-            self.fileName = fileDialog.getOpenFileName(self, "Open File", "")[0]
-            reloadFunc()
+            filename = fileDialog.getOpenFileName(self, "Open File", "")[0]
+            if filename:
+                self.fileName = filename
+                reloadFunc()
         
         def reloadFunc():
-            self.marieReader = MarieReader(self.fileName)
-            self.marie = Marie(self.marieReader)
+            if not hasattr(self, 'fileName'):
+                return
+            self.timer.stop()
+            try:
+                self.marieReader = MarieReader(self.fileName)
+            except (OSError, ValueError) as error:
+                QMessageBox.warning(self, "Assembly error", str(error))
+                return
+            self.marie = self._newMachine()
 
             self.M = self.marie.M[:]
             self.symbolTable = self.marie.symbolTable.copy()
@@ -154,21 +166,16 @@ class MarieGUI(QMainWindow):
 
 
     def updateProgramTableWidget(self):
-        programLines = [i.split() for i in self.marieReader.input]
-        self.programTableWidget.setRowCount(len(programLines))
+        listing = self.marieReader.program.listing
+        self.programTableWidget.setRowCount(len(listing))
         self.programTableWidget.setColumnCount(4)
         self.programTableWidget.setHorizontalHeaderLabels(["Label", "Opcode", "Address", "HEX"])
-        self.programTableWidget.setVerticalHeaderLabels([hex(i)[2:].zfill(3).upper() for i in range(len(programLines))])
-        for i in range(len(programLines)):
-            ele = programLines[i]
-            if ele[0][-1] != ",":
-                programLines[i].insert(0, " ")
-            if len(ele) == 2:
-                programLines[i].insert(2, "000")
-            self.programTableWidget.setItem(i, 0, QTableWidgetItem(str(programLines[i][0])))
-            self.programTableWidget.setItem(i, 1, QTableWidgetItem(str(programLines[i][1])))
-            self.programTableWidget.setItem(i, 2, QTableWidgetItem(str(programLines[i][2])))
-            self.programTableWidget.setItem(i, 3, QTableWidgetItem(hex(self.M[i])[2:].zfill(4).upper()))
+        self.programTableWidget.setVerticalHeaderLabels([f"{row['address']:03X}" for row in listing])
+        for i, row in enumerate(listing):
+            tokens = row['source'].split('/')[0].split(';')[0].split()
+            operand = tokens[-1] if row['operation'] not in ('INPUT','OUTPUT','HALT','CLEAR') else '000'
+            for j, value in enumerate((row['label'] or '', row['operation'], operand, f"{row['word']:04X}")):
+                self.programTableWidget.setItem(i, j, QTableWidgetItem(value))
 
     def updateSymbolTableWidget(self):
         self.symbolTableWidget.setRowCount(len(self.symbolTable))
@@ -223,54 +230,66 @@ class MarieGUI(QMainWindow):
 
 
 
+    def _newMachine(self):
+        machine = Marie(self.marieReader, input_provider=self._readInput)
+        machine.GUI = True
+        return machine
+
+    def _readInput(self):
+        self.timer.stop()
+        text, accepted = QInputDialog.getText(self, "MARIE Input", "16-bit hexadecimal value (0000–FFFF):")
+        if not accepted:
+            raise ValueError("Input canceled. Reset to resume.")
+        value = int(text, 16)
+        if not 0 <= value <= 65535:
+            raise ValueError("Input must be between 0000 and FFFF.")
+        return value
+
     def guiRun(self):
-
-        
-
-        self.AC = self.marie.AC
-        self.PC = self.marie.PC
-        self.MAR = self.marie.MAR
-        self.MBR = self.marie.MBR
-        self.IR = self.marie.IR
-        self.InReg = self.marie.InReg
-        self.OutReg =  self.marie.OutReg
-        self.M = self.marie.M[:]
-        self.marie.run()
-        self.updateRegisterTableWidget()
+        if self.marie and self.marie.canStep:
+            self.timer.start()
 
     def guiStep(self):
-        self.AC = self.marie.AC
-        self.PC = self.marie.PC
-        self.MAR = self.marie.MAR
-        self.MBR = self.marie.MBR
-        self.IR = self.marie.IR
-        self.InReg = self.marie.InReg
-        self.OutReg =  self.marie.OutReg
-        self.M = self.marie.M[:]
-        changed = self.marie.step()
-        self.updateRegisterTableWidget()
-        for i in range(self.programTableWidget.rowCount()):
-            self.setColortoRow(self.programTableWidget, i, QColor(1, 0, 0, 0))
-        self.setColortoRow(self.programTableWidget, self.marie.PC - 1, QColor(51, 102, 153))
-        for element in changed:
-            row = element / 16
-            col = element % 16
-            for i in range(self.memoryTableWidget.rowCount()):
-                self.setColortoRow(self.memoryTableWidget, i, QColor(1, 0, 0, 0))
-            self.memoryTableWidget.item(row, col).setBackground(QColor(51, 102, 153))
+        self.timer.stop()
+        self._advance()
 
-    
-    def guiReset(self):
-        self.marie = None
-        for i in range(self.programTableWidget.rowCount()):
-            self.setColortoRow(self.programTableWidget, i, QColor(1, 0, 0, 0))
+    def _advance(self):
+        if not self.marie or not self.marie.canStep:
+            self.timer.stop()
+            return
+        was_running = self.timer.isActive()
+        try:
+            changed = self.marie.step() or []
+        except ValueError as error:
+            self.timer.stop()
+            self.marie.canStep = False
+            QMessageBox.warning(self, "Execution error", str(error))
+            return
         self.updateRegisterTableWidget()
-        self.marie = Marie(self.marieReader)
+        for i, row in enumerate(self.marieReader.program.listing):
+            color = QColor(51, 102, 153) if row['address'] == self.marie.last_address else QColor(0, 0, 0, 0)
+            self.setColortoRow(self.programTableWidget, i, color)
+        for address in changed:
+            self.memoryTableWidget.item(address // 16, address % 16).setBackground(QColor(51, 102, 153))
+        if not self.marie.canStep:
+            self.timer.stop()
+        elif was_running:
+            self.timer.start()
+
+    def guiReset(self):
+        self.timer.stop()
+        if self.marieReader:
+            self.marie = self._newMachine()
+            for i in range(self.programTableWidget.rowCount()):
+                self.setColortoRow(self.programTableWidget, i, QColor(0, 0, 0, 0))
+            self.updateRegisterTableWidget()
 
     def setColortoRow(self, table, rowIndex, color):
-        for j in range(table.columnCount()):
-            table.item(rowIndex, j).setBackground(color)
-        
+        if 0 <= rowIndex < table.rowCount():
+            for j in range(table.columnCount()):
+                if table.item(rowIndex, j):
+                    table.item(rowIndex, j).setBackground(color)
+
 
 if __name__ == "__main__":
 

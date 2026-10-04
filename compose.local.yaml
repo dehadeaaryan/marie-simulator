@@ -1,0 +1,8 @@
+# Optional local Docker review: docker compose -f compose.yaml -f compose.local.yaml up --build
+services:
+  api:
+    environment:
+      COOKIE_SECURE: "false"
+  web:
+    ports:
+      - "127.0.0.1:8080:8080"
