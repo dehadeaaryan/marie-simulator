@@ -42,3 +42,10 @@ footer{margin-top:28px}
 .library,.guide{padding-top:8px;margin-inline:auto}
 @media(max-width:1000px){.workspace-grid{grid-template-columns:minmax(0,1.15fr) minmax(320px,1fr)}}
 @media(max-width:760px){main{padding-top:16px}.workspace-grid{grid-template-columns:minmax(0,1fr);gap:16px}.source-panel .editor-host{height:340px;min-height:340px;flex:auto}.machine-column{gap:16px}.memory-panel{margin-top:16px}.state-strip{padding-inline:0}.editor-footer .shortcut{margin-left:auto}}
+
+.site-header nav .nav-link{display:flex;align-items:center;justify-content:center;border:1px solid transparent;border-radius:99px;padding:9px 15px;font-size:13px;font-weight:600;color:var(--muted);min-height:42px;text-decoration:none}
+.site-header nav .nav-link:hover{background:var(--subtle);color:var(--ink)}
+.site-header nav .nav-link.chosen{border-color:var(--line);background:var(--subtle);color:var(--ink)}
+.about-page{max-width:860px;padding-top:40px}.about-page h1{font-size:clamp(32px,5vw,46px);font-weight:800;letter-spacing:-.045em}.about-lead{color:var(--muted);font-size:17px;max-width:650px;margin:16px 0 28px}.about-section{padding:28px;margin-bottom:20px}.about-section h2{font-size:21px}.about-section p{font-size:15px;line-height:1.8;color:var(--muted)}.about-section strong{color:var(--ink)}.about-section a,.about-back{color:var(--accent)}.about-source{display:inline-block;font-size:14px;padding-block:8px}.about-back{display:inline-block;padding-block:12px;font-size:14px}
+@media(max-width:1000px){.site-header nav .nav-link{padding-inline:10px}}
+@media(max-width:760px){.site-header .about-nav{display:flex;position:static;flex-direction:row;margin-left:auto;padding:0;border:0;box-shadow:none;background:transparent}.about-page{padding-top:28px}.about-section{padding:22px}.about-lead{font-size:15px}}

@@ -136,7 +136,7 @@
   });
 </script>
 
-<svelte:head><title>MARIE — Assembly Simulator</title><meta name="description" content="Write and run MARIE assembly, inspect registers, and explore memory." /></svelte:head>
+<svelte:head><link rel="canonical" href="https://marie.aaryandehade.com/" /><title>MARIE — Assembly Simulator</title><meta name="description" content="Write and run MARIE assembly, inspect registers, and explore memory." /></svelte:head>
 <svelte:window onkeydown={shortcuts} />
 
 <a class="skip-link" href="#main-content">Skip to simulator</a>
@@ -147,6 +147,7 @@
     <button class:chosen={tab === 'workspace'} onclick={() => { tab = 'workspace'; mobileMenu = false; }}>Workspace</button>
     <button class:chosen={tab === 'examples'} onclick={() => { tab = 'examples'; mobileMenu = false; }}>Examples</button>
     <button class:chosen={tab === 'guide'} onclick={() => { tab = 'guide'; mobileMenu = false; }}>Instruction guide</button>
+    <a class="nav-link" href="/about">About</a>
   </nav>
   <button class="icon-button theme-button" onclick={changeTheme} aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} theme`} title="Change theme">{theme === 'light' ? '☾' : '☀'}</button>
   <button class="icon-button mobile-menu" onclick={() => mobileMenu = !mobileMenu} aria-label="Toggle navigation" aria-expanded={mobileMenu}>☰</button>
