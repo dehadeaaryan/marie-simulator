@@ -136,7 +136,7 @@
   });
 </script>
 
-<svelte:head><title>MARIE — A little machine. A clearer picture.</title><meta name="description" content="Write MARIE assembly, step through instructions, and see the machine work. A Python-powered architecture playground by Aaryan Dehade." /></svelte:head>
+<svelte:head><title>MARIE — Assembly Simulator</title><meta name="description" content="Write and run MARIE assembly, inspect registers, and explore memory." /></svelte:head>
 <svelte:window onkeydown={shortcuts} />
 
 <a class="skip-link" href="#main-content">Skip to simulator</a>
@@ -153,10 +153,7 @@
 </header>
 
 <main id="main-content">
-  <section class="intro">
-    <div><p class="eyebrow"><span class="small-square"></span> MADE BY AARYAN DEHADE</p><h1>A little machine.<br /><em>A clearer picture.</em></h1><p class="intro-description">Write assembly. Follow the registers. See how a computer thinks.</p></div>
-    <div class="architecture-tag"><span>16<span class="muted">-bit words</span></span><span>4,096<span class="muted"> memory cells</span></span><span>15<span class="muted"> instructions</span></span></div>
-  </section>
+  <h1 class="sr-only">MARIE Assembly Simulator</h1>
 
   {#if tab === 'workspace'}
     <div class="toolbar" aria-label="Execution controls">
@@ -211,7 +208,7 @@
         <div class="listing-scroll"><table class="listing-table"><thead><tr><th>Address</th><th>Line</th><th>Word</th><th>Source</th></tr></thead><tbody>{#each machine?.listing ?? [] as row}<tr class:current={row.address === machine?.current_address}><td><code>{hex(row.address, 3)}</code></td><td>{row.line}</td><td><code>{hex(machine?.memory[row.address] ?? row.word)}</code></td><td><code>{row.source}</code></td></tr>{:else}<tr><td colspan="4" class="empty-listing">Assemble your source to see the address and encoding of each line.</td></tr>{/each}</tbody></table></div>
       {/if}
     </section>
-    <div class="workspace-note"><span>PYTHON POWERED</span><p>Your source stays in this browser. Execution runs in an isolated, temporary server session.</p><button class="text-button" onclick={() => tab = 'guide'}>New to MARIE? Start here ↗</button></div>
+
   {:else if tab === 'examples'}
     <section class="library"><p class="eyebrow">LEARN BY DOING</p><h2>Small programs. Big ideas.</h2><p>Choose a starting point. Loading an example replaces the source in your editor.</p><div class="example-grid">{#each examples as example, index}<article class="panel example-card"><span class="panel-number">0{index + 1}</span><h3>{example.name}</h3><p>{example.description}</p><pre>{example.source.split('\n').filter(l => !l.startsWith('/')).slice(0, 5).join('\n').trim()}</pre><button disabled={active || busy} onclick={() => loadExample(index)}>Open in workspace <span>↗</span></button></article>{/each}</div>{#if active}<p class="alert">Pause your running program before loading an example.</p>{/if}</section>
   {:else}

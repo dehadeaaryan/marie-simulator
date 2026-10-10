@@ -28,3 +28,17 @@ button{border-radius:99px;font-weight:600}.toolbar{border-radius:20px;padding:12
 @media(max-width:760px){.site-header{width:calc(100% - 24px);margin-top:12px;min-height:64px;padding:10px 14px;gap:12px}.brand{font-size:22px;gap:8px}.brand img{width:32px;height:32px;border-radius:9px}.product-name{font-size:21px}.site-header nav{top:calc(100% + 8px);left:0;right:0;padding:10px;background:var(--panel);border:1px solid var(--line);border-radius:22px;box-shadow:0 12px 28px #0003}.site-header nav button{padding-inline:14px}.theme-button{margin-left:auto}.site-header .icon-button{min-height:40px;min-width:40px;font-size:18px}main{width:calc(100% - 32px);padding:0}.intro{padding:34px 4px 28px}.intro h1{font-size:clamp(38px,9.7vw,52px);letter-spacing:-.055em}.intro-description{font-size:14px;max-width:340px;line-height:1.7;margin-top:14px}.eyebrow{font-size:9px;letter-spacing:1.5px;margin-bottom:17px}.toolbar{padding:8px;border-radius:18px}.toolbar .controls button:not(.primary){padding-inline:7px}.toolbar .primary{padding-inline:10px}.controls button{font-size:12px;gap:4px}.panel{border-radius:20px}.panel-heading{padding:15px 16px;min-height:58px}.panel-heading h2{font-size:15px}.editor-footer,.registers,.next-instruction,.input-form,.output-heading,.memory-tools,.memory-footer{padding-inline:16px}.register-caption{display:inline}.output-log{margin-inline:16px}.memory-tools input{border-radius:8px}.library>h2,.guide>h2{font-size:32px}.mini-label{font-size:8px}.example-card h3{font-size:22px}.intro .mobile-break{display:none}.site-header .header-divider{display:none}}
 :root:not([data-theme=dark]){--accent:#a94110}
 :root:not([data-theme=dark]) .intro h1 em{color:var(--accent)}
+
+/* Keep execution controls and the workspace together, directly below navigation. */
+main{padding-top:24px}
+.workspace-grid{align-items:stretch;grid-template-columns:minmax(0,1.3fr) minmax(360px,1fr);gap:20px}
+.source-panel{display:flex;flex-direction:column;min-width:0}
+.source-panel .editor-host{flex:1;min-height:400px;height:auto}
+.source-panel .editor-footer{margin-top:auto;flex-wrap:wrap}
+.machine-column{min-width:0;gap:20px}
+.state-strip{padding:10px 4px;flex-wrap:wrap}
+.memory-panel{margin-top:20px}
+footer{margin-top:28px}
+.library,.guide{padding-top:8px;margin-inline:auto}
+@media(max-width:1000px){.workspace-grid{grid-template-columns:minmax(0,1.15fr) minmax(320px,1fr)}}
+@media(max-width:760px){main{padding-top:16px}.workspace-grid{grid-template-columns:minmax(0,1fr);gap:16px}.source-panel .editor-host{height:340px;min-height:340px;flex:auto}.machine-column{gap:16px}.memory-panel{margin-top:16px}.state-strip{padding-inline:0}.editor-footer .shortcut{margin-left:auto}}
