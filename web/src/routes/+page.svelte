@@ -142,7 +142,7 @@
 <a class="skip-link" href="#main-content">Skip to simulator</a>
 <div class="family-backdrop" aria-hidden="true"></div>
 <header class="site-header">
-  <a class="brand" href="/" aria-label="MARIE home"><img src="/ad-logo.png?v=cyan-glitch-1" alt="AD" width="46" height="32" /><span>marie<span class="orange">.</span></span></a>
+  <a class="brand" href="/" aria-label="MARIE home"><img src="/ad-logo.png?v=orange-glass-v1" alt="AD" width="46" height="32" /><span>marie<span class="orange">.</span></span></a>
   <nav class:open={mobileMenu} aria-label="Main navigation">
     <button class:chosen={tab === 'workspace'} onclick={() => { tab = 'workspace'; mobileMenu = false; }}>Workspace</button>
     <button class:chosen={tab === 'examples'} onclick={() => { tab = 'examples'; mobileMenu = false; }}>Examples</button>
