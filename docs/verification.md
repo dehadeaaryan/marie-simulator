@@ -43,3 +43,10 @@ offscreen Qt smoke test, on Python 3.12. No PyPI upload is performed by preparat
 The final distribution name remains marieSimulator, after PyPI rejected the
 proposed marie-simulator name. Installed-wheel checks verify headless and desktop
 imports. Publication is separate.
+
+## Published 1.2.0 and documentation-only 1.2.1
+
+PyPI confirms 1.2.0 was published on 2026-10-18 UTC. The main README no longer
+labels the available package as unpublished. Version 1.2.1 packages that correction
+for PyPI; simulator/assembler code is unchanged. Historical verification entries
+above describe the state when their checks were originally performed.

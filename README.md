@@ -4,27 +4,23 @@ A Python MARIE execution engine with a retained Qt desktop application and a Sve
 
 The web app uses **Python for all assembly and execution**. Svelte/TypeScript renders the editor and state; it does not simulate the machine. No database, paid service, or AI feature is required.
 
-## Python package 1.2.0 (prepared, not yet published)
+## Install the Python package
 
-The PyPI distribution remains **marieSimulator**. The GitHub repository and web
-app can use marie-simulator, but PyPI rejected that proposed distribution name as
-too similar to an existing project. Existing installation and import names stay
-compatible; no uninstall or package-name migration is needed.
-
-This release packages the updated two-pass assembler and corrected MARIE engine.
-The pure-Python engine has no required Qt or web dependencies. Python 3.10+ is
-supported; Python 3.12 is tested. The optional desktop app requires PySide6.
-
-After 1.2.0 is published, install the headless library with:
+The distribution is [marieSimulator](https://pypi.org/project/marieSimulator/).
+Install or upgrade the headless library with:
 
 ```sh
-python -m pip install --upgrade 'marieSimulator==1.2.0'
+python -m pip install --upgrade marieSimulator
 ```
+
+The pure-Python engine has no required Qt or web dependencies. Python 3.10+ is
+supported; Python 3.12 is tested. The package includes the shared two-pass
+assembler and MARIE execution engine.
 
 For the retained desktop GUI, install the extra instead:
 
 ```sh
-python -m pip install --upgrade 'marieSimulator[desktop]==1.2.0'
+python -m pip install --upgrade 'marieSimulator[desktop]'
 ```
 
 Assemble and run source directly, without Qt or the web service:
@@ -108,4 +104,4 @@ Browser tests need the local servers running. Qt smoke tests skip if PySide6 is 
 - [Verification results and limitations](docs/verification.md)
 - [Existing logo provenance](docs/branding.md)
 
-Future work: breakpoints, sharing, import/export, lessons, and history. These are outside the initial release. Original Git history and historical distributions remain. Updated 1.2.0 distributions are prepared locally; publishing to PyPI and hosted deployment are separate actions.
+Future work: breakpoints, sharing, import/export, lessons, and history. These are outside the initial release. Original Git history and historical distributions remain. The Python package is published on PyPI; website hosting remains a separate deployment.

@@ -1,6 +1,7 @@
 # Python package releases
 
-Prepared version: **1.2.0**, following 1.1.8 on the existing **marieSimulator**
+Prepared version: **1.2.1**, a documentation-only update following the published
+1.2.0 release on the existing **marieSimulator**
 PyPI project. Python imports remain marieSimulator. Keeping the existing project
 preserves release history and normal upgrades. The proposed marie-simulator
 project name was rejected by PyPI as too similar; it is not used by this release.
@@ -15,7 +16,7 @@ desktop smoke test. Headless imports have no Qt or web dependencies.
 PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m pytest -q -p no:cacheprovider
 python -m pip install --upgrade build twine
 python -m build
-python -m twine check --strict dist/mariesimulator-1.2.0-py3-none-any.whl dist/mariesimulator-1.2.0.tar.gz
+python -m twine check --strict dist/mariesimulator-1.2.1-py3-none-any.whl dist/mariesimulator-1.2.1.tar.gz
 ```
 
 Current preparation builds from a temporary clean source tree to preserve the
@@ -35,14 +36,14 @@ performs those checks, plus Twine's strict metadata check.
 Run from the repository root after reviewing and committing source:
 
 ```sh
-.venv/bin/python -m twine upload --repository pypi dist/mariesimulator-1.2.0-py3-none-any.whl dist/mariesimulator-1.2.0.tar.gz
+.venv/bin/python -m twine upload --repository pypi dist/mariesimulator-1.2.1-py3-none-any.whl dist/mariesimulator-1.2.1.tar.gz
 ```
 
 Use your PyPI API token at Twine's hidden prompt. Never include it in source,
 command arguments or chat. Use the exact files above, not dist/*: historical
 releases and superseded names must not be uploaded. Superseded unpublished
 marie-simulator 1.2.0 files were moved out of dist/ during final preparation.
-Building and checking do not publish anything. If 1.2.0 has already been published,
+Building and checking do not publish anything. If 1.2.1 has already been published,
 choose a new version rather than attempting to overwrite immutable PyPI files.
 
 ## Install after publication
@@ -51,9 +52,9 @@ Existing users can upgrade normally; no package uninstall or import rename is
 needed:
 
 ```sh
-python -m pip install --upgrade 'marieSimulator==1.2.0'
+python -m pip install --upgrade 'marieSimulator==1.2.1'
 # Optional retained desktop GUI:
-python -m pip install --upgrade 'marieSimulator[desktop]==1.2.0'
+python -m pip install --upgrade 'marieSimulator[desktop]==1.2.1'
 ```
 
 Python 3.10+ is supported; local tests run on 3.12. The desktop extra requires
@@ -69,3 +70,10 @@ This release therefore retains marieSimulator by the maintainer's choice. The
 existing PyPI project must not be deleted for this migration.
 
 Reference: https://pypi.org/help/#project-name
+
+## Published README corrections
+
+Version 1.2.0 was published on 2026-10-18 UTC with stale "prepared" wording in
+its long description. GitHub README edits alone do not update an uploaded
+release's metadata. Version 1.2.1 packages the corrected README without changing
+simulator code. Do not try to overwrite the published 1.2.0 files.

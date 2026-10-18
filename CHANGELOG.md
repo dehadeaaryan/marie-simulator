@@ -1,6 +1,12 @@
 # Changelog
 
-## 1.2.0 — unreleased
+## 1.2.1 — prepared
+
+- Correct the package README after 1.2.0 was published: replace stale preparation
+  status with normal install/upgrade instructions and a link to the live project.
+- Documentation-only update; simulator and assembler code are unchanged.
+
+## 1.2.0 — 2026-10-18 (UTC)
 
 The distribution remains marieSimulator; normal upgrades and imports stay compatible.
 
