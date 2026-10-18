@@ -1,0 +1,13 @@
+include LICENSE README.md CHANGELOG.md pyproject.toml setup.py main.py trial
+include docs/correctness.md docs/architecture.md docs/verification.md docs/releasing.md
+include tests/test_engine.py tests/test_desktop.py tests/conftest.py
+recursive-include src/marieSimulator *.py
+prune web
+prune backend
+prune deploy
+prune .venv
+prune .git
+prune .pytest_cache
+prune build
+prune dist
+global-exclude .env .env.* .DS_Store *.py[cod] *.db *.sqlite3 *.log

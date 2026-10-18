@@ -33,3 +33,12 @@ Port 5173 was already occupied, so it was left alone. The UI now uses the source
 - Browser verification uses Chromium and an emulated iPhone viewport; real-device Safari/Firefox and a manual screen-reader audit were not performed.
 - The desktop's original Edit/Save menu placeholders remain. No package distribution was rebuilt or published.
 - Breakpoints, sharing, import/export, guided lessons, and history remain future work, as requested.
+
+## 1.2.0 package preparation
+
+The updated package is being built and checked separately from the historical
+1.1.8 artifacts. The current checkout passes all 68 Python tests, including the
+offscreen Qt smoke test, on Python 3.12. No PyPI upload is performed by preparation.
+
+The prepared distribution name is now marie-simulator; installed-wheel checks
+verify that marieSimulator imports remain compatible. Publication is separate.

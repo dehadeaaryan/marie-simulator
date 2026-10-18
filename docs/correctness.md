@@ -27,7 +27,7 @@ The implementation was inspected directly, not inferred from the README. All 15 
 | Store highlighting passed a float row index to Qt | Integer row division and guarded table access |
 | Canceled file load tried opening an empty filename | Preserve the current desktop program on cancellation/error |
 
-The assembler intentionally tightens acceptance: unknown instructions no longer act as HEX, unresolved labels and extra/missing operands fail, duplicate labels fail, and only valid Skipcond operands are allowed. Existing valid `trial` syntax and the desktop/CLI interfaces remain supported. Blank/comment handling, DEC, and ORG are added. Python 3.10+ is now required; Python 3.12 is used and tested for the API and containers. Old distributable files remain untouched historical artifacts; no package release has been built or published.
+The assembler intentionally tightens acceptance: unknown instructions no longer act as HEX, unresolved labels and extra/missing operands fail, duplicate labels fail, and only valid Skipcond operands are allowed. Existing valid `trial` syntax and the desktop/CLI interfaces remain supported. Blank/comment handling, DEC, and ORG are added. Python 3.10+ is now required; Python 3.12 is used and tested for the API and containers. Old distributable files remain untouched historical artifacts. Updated 1.2.0 distributions are prepared separately; see releasing.md. No PyPI upload is performed by package preparation.
 
 ## Verification
 
