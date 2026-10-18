@@ -4,7 +4,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="marie-simulator",
+    name="marieSimulator",
     version="1.2.0",
     author="Aaryan Dehade",
     author_email="dehadeaaryan@gmail.com",

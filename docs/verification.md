@@ -40,5 +40,6 @@ The updated package is being built and checked separately from the historical
 1.1.8 artifacts. The current checkout passes all 68 Python tests, including the
 offscreen Qt smoke test, on Python 3.12. No PyPI upload is performed by preparation.
 
-The prepared distribution name is now marie-simulator; installed-wheel checks
-verify that marieSimulator imports remain compatible. Publication is separate.
+The final distribution name remains marieSimulator, after PyPI rejected the
+proposed marie-simulator name. Installed-wheel checks verify headless and desktop
+imports. Publication is separate.

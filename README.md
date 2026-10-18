@@ -6,11 +6,10 @@ The web app uses **Python for all assembly and execution**. Svelte/TypeScript re
 
 ## Python package 1.2.0 (prepared, not yet published)
 
-**Publication is currently blocked:** PyPI rejected `marie-simulator` as too similar
-to an existing project. A 404 project-page check does not establish that PyPI will
-accept a name. The install commands below apply only after a successful publish.
-Keeping this name requires resolving the restriction with PyPI; otherwise rebuild
-under the existing `marieSimulator` distribution or an accepted alternative name.
+The PyPI distribution remains **marieSimulator**. The GitHub repository and web
+app can use marie-simulator, but PyPI rejected that proposed distribution name as
+too similar to an existing project. Existing installation and import names stay
+compatible; no uninstall or package-name migration is needed.
 
 This release packages the updated two-pass assembler and corrected MARIE engine.
 The pure-Python engine has no required Qt or web dependencies. Python 3.10+ is
@@ -19,34 +18,14 @@ supported; Python 3.12 is tested. The optional desktop app requires PySide6.
 After 1.2.0 is published, install the headless library with:
 
 ```sh
-python -m pip install --upgrade 'marie-simulator==1.2.0'
+python -m pip install --upgrade 'marieSimulator==1.2.0'
 ```
 
 For the retained desktop GUI, install the extra instead:
 
 ```sh
-python -m pip install --upgrade 'marie-simulator[desktop]==1.2.0'
+python -m pip install --upgrade 'marieSimulator[desktop]==1.2.0'
 ```
-
-### Migrating from the old PyPI name
-
-The distribution is now **marie-simulator**. Python imports remain
-`marieSimulator`, so existing source code keeps working. This is a new PyPI
-project, not an automatic rename of the old project: previous release history,
-download totals and automatic upgrades do not transfer.
-
-In an existing environment, remove the old distribution before installing the
-new one, because both distributions provide the same Python import directory:
-
-```sh
-python -m pip uninstall marieSimulator
-python -m pip install 'marie-simulator==1.2.0'
-```
-
-Desktop users should install `marie-simulator[desktop]==1.2.0` instead. Also update
-requirements and lockfiles that reference the old distribution name. Fresh
-virtual environments need only the new install command. Do not install both
-names together. The old `marieSimulator` project remains separate and unchanged.
 
 Assemble and run source directly, without Qt or the web service:
 

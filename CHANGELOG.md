@@ -2,10 +2,10 @@
 
 ## 1.2.0 — unreleased
 
-Publication under marie-simulator is blocked by PyPI's similar-name restriction.
+The distribution remains marieSimulator; normal upgrades and imports stay compatible.
 
-- Rename the PyPI distribution to marie-simulator while retaining marieSimulator
-  imports. The new project has separate history and requires explicit migration.
+- Retain the existing marieSimulator PyPI project after PyPI rejected the proposed
+  marie-simulator name. Existing users need no package-name migration.
 
 - Package the shared two-pass assembler with source locations, forward labels,
   blank/comment handling, DEC/HEX/ORG directives and explicit assembly errors.

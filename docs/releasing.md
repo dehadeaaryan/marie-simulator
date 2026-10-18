@@ -1,88 +1,71 @@
 # Python package releases
 
-Prepared version: **1.2.0**, under the new PyPI distribution **marie-simulator**.
-The old marieSimulator distribution remains at its previous release; Python
-imports stay marieSimulator for source compatibility. Only Python library/desktop modules ship in the wheel; the web
-frontend and FastAPI backend are separate applications.
+Prepared version: **1.2.0**, following 1.1.8 on the existing **marieSimulator**
+PyPI project. Python imports remain marieSimulator. Keeping the existing project
+preserves release history and normal upgrades. The proposed marie-simulator
+project name was rejected by PyPI as too similar; it is not used by this release.
+The GitHub repository can retain its marie-simulator name independently.
 
 ## Validate and build
 
-Run Python tests from the checkout with its Python 3.12 environment:
+The Python 3.12 checkout passes all 68 tests, including the optional offscreen Qt
+desktop smoke test. Headless imports have no Qt or web dependencies.
 
 ```sh
 PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m pytest -q -p no:cacheprovider
-```
-
-For normal release preparation, install packaging tools in a dedicated environment
-and build the source archive and wheel:
-
-```sh
 python -m pip install --upgrade build twine
 python -m build
-python -m twine check --strict dist/marie_simulator-1.2.0-py3-none-any.whl dist/marie_simulator-1.2.0.tar.gz
+python -m twine check --strict dist/mariesimulator-1.2.0-py3-none-any.whl dist/mariesimulator-1.2.0.tar.gz
 ```
 
-The current preparation builds from a temporary clean source copy, preserving
-historical tracked 1.1.8 archives and egg-info rather than overwriting them.
-The output filenames normalize the distribution hyphen to an underscore by current setuptools.
+Current preparation builds from a temporary clean source tree to preserve the
+historical tracked 1.1.8 distributions and egg-info. Current setuptools lowercases
+the distribution in filenames; the wheel's metadata name remains marieSimulator.
+The wheel contains the updated engine, assembler, reader and optional desktop
+modules. The web frontend and FastAPI backend are separate applications.
 
-Inspect archive contents: include Marie.py, MarieReader.py, assembler.py,
-MarieGUI.py and __init__.py; exclude .env, credentials, .DS_Store, caches, virtual
-environments, web/backend services and nested distribution archives. The source
-archive should include correctness notes, release docs and the offline engine /
-desktop tests. Rebuild a wheel from the source archive as a completeness check.
-Test imports and a small program from the installed wheel outside the checkout,
-including an environment without Qt. Desktop smoke tests use QT_QPA_PLATFORM=offscreen.
-
-## Publishing blocker
-
-PyPI rejected the new project with HTTP 400: "The name 'marie-simulator' is too
-similar to an existing project." The earlier HTTP 404 only showed that the public
-project endpoint was absent; it did not prove registration eligibility.
-
-This is a registry name restriction, not a Twine syntax, wheel validation or token
-error. Retrying with --verbose, upgrading Twine, changing filename punctuation or
-using --skip-existing does not resolve it. Do not delete the old project to try
-to work around the restriction.
-
-Keep the rename pending a request to PyPI support, or explicitly choose another
-distribution name (including retaining marieSimulator) and rebuild. The upload
-command below can succeed under this name only after PyPI permits it.
-
-Reference: https://pypi.org/help/#project-name
+Inspect archives for credentials, .env, .DS_Store, caches, databases and generated
+files; exclude web/backend services and nested distribution archives. Rebuild a
+wheel from the source archive and test an installed wheel outside the checkout,
+both without Qt and with the optional desktop dependency. The release preparation
+performs those checks, plus Twine's strict metadata check.
 
 ## Publish explicitly
 
-After reviewing and committing the source, publish only these versioned files:
+Run from the repository root after reviewing and committing source:
 
 ```sh
-python -m twine upload --repository pypi dist/marie_simulator-1.2.0-py3-none-any.whl dist/marie_simulator-1.2.0.tar.gz
+.venv/bin/python -m twine upload --repository pypi dist/mariesimulator-1.2.0-py3-none-any.whl dist/mariesimulator-1.2.0.tar.gz
 ```
 
-Use a PyPI API token through Twine's hidden prompt or supported credential store.
-Do not put it in source or command arguments. Building and checking do not upload
-anything. PyPI releases are immutable: if 1.2.0 already exists, choose a new version.
+Use your PyPI API token at Twine's hidden prompt. Never include it in source,
+command arguments or chat. Use the exact files above, not dist/*: historical
+releases and superseded names must not be uploaded. Superseded unpublished
+marie-simulator 1.2.0 files were moved out of dist/ during final preparation.
+Building and checking do not publish anything. If 1.2.0 has already been published,
+choose a new version rather than attempting to overwrite immutable PyPI files.
 
-## Compatibility
+## Install after publication
 
-Python 3.10+ remains the package minimum; the local suite is run on 3.12. The
-headless engine requires no external runtime dependencies. Desktop users install
-marie-simulator[desktop], which requires PySide6 6.11.0. No website, API, database or
-analytics service is installed or started by a library import.
+Existing users can upgrade normally; no package uninstall or import rename is
+needed:
 
-## Migration and first publication
+```sh
+python -m pip install --upgrade 'marieSimulator==1.2.0'
+# Optional retained desktop GUI:
+python -m pip install --upgrade 'marieSimulator[desktop]==1.2.0'
+```
 
-The new project name is marie-simulator. The old name normalizes to
-mariesimulator, which is a different project. The new name was checked and
-returned HTTP 404 before preparation; this does not reserve it. A successful first upload creates the new project only if PyPI permits the name.
-The attempted upload has now demonstrated that this name is blocked.
+Python 3.10+ is supported; local tests run on 3.12. The desktop extra requires
+PySide6 6.11.0. Neither the website nor its API/analytics services are installed or
+started by a Python library import.
 
-Use exact new artifact names, never dist/*, because dist/ also contains historical
-1.1.8 releases under the old name. The superseded, unpublished 1.2.0 artifacts
-under the old name have been moved out of dist/ during rename preparation.
+## PyPI name restriction
 
-Users with the old distribution installed should uninstall marieSimulator and
-then install marie-simulator (or its desktop extra). Both names provide the same
-marieSimulator import directory and must not be installed together. Existing
-Python import statements need no edits. Historical download totals and releases
-do not migrate, and existing users do not automatically upgrade to the new name.
+An absent public project page does not prove registration eligibility. PyPI
+rejected marie-simulator with HTTP 400 because it is too similar to an existing
+name. A different Twine command or --skip-existing cannot resolve that restriction.
+This release therefore retains marieSimulator by the maintainer's choice. The
+existing PyPI project must not be deleted for this migration.
+
+Reference: https://pypi.org/help/#project-name
